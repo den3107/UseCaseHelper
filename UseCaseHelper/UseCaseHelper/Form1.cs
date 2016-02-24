@@ -48,6 +48,8 @@ namespace UseCaseHelper
             lineSelectionActor = null;
             lineSelectionUseCase = null;
             pictureBoxGraphics = useCaseDiagramPictureBox.CreateGraphics();
+            pictureBoxGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            pictureBoxGraphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
         }
 
         private void useCaseDiagramPictureBox_MouseClick(object sender, MouseEventArgs e)
@@ -62,7 +64,7 @@ namespace UseCaseHelper
                 if (actorRadioButton.Checked)
                 {
                     // Open dialog prompting user for actor name
-                    using (NameForm dialog = new NameForm())
+                    using (NameForm dialog = new NameForm("actor"))
                     {
                         DialogResult result = dialog.ShowDialog();
                         if (result == DialogResult.OK)
@@ -80,7 +82,7 @@ namespace UseCaseHelper
                 else if(useCaseRadioButton.Checked)
                 {
                     // Open dialog prompting user for use case name
-                    using (NameForm dialog = new NameForm())
+                    using (NameForm dialog = new NameForm("use case"))
                     {
                         DialogResult result = dialog.ShowDialog();
                         if (result == DialogResult.OK)
@@ -322,10 +324,22 @@ namespace UseCaseHelper
             {
                 if(selectedType == typeof(Actor))
                 {
+                    // Check if connected to line and delete line if it is
+                    Line line = GetConnectedLine(actors[selectedIndex]);
+                    if(line != null)
+                    {
+                        lines.Remove(line);
+                    }
                     actors.RemoveAt(selectedIndex);
                 }
                 else if (selectedType == typeof(UseCase))
                 {
+                    // Check if connected to line and delete line if it is
+                    Line line = GetConnectedLine(useCases[selectedIndex]);
+                    if (line != null)
+                    {
+                        lines.Remove(line);
+                    }
                     useCases.RemoveAt(selectedIndex);
                 }
                 else if (selectedType == typeof(Line))
@@ -338,13 +352,65 @@ namespace UseCaseHelper
             Redraw();
         }
 
+        private Line GetConnectedLine(Actor actor)
+        {
+            foreach(Line line in lines)
+            {
+                if(line.actor == actor)
+                {
+                    return line;
+                }
+            }
+            return null;
+        }
+
+        private Line GetConnectedLine(UseCase useCase)
+        {
+            foreach (Line line in lines)
+            {
+                if (line.useCase == useCase)
+                {
+                    return line;
+                }
+            }
+            return null;
+        }
+
         private void Form1_Resize(object sender, EventArgs e)
         {
             if (pictureBoxGraphics != null)
             {
                 // Create new graphics object due to new sizes (they don't update)
                 pictureBoxGraphics = useCaseDiagramPictureBox.CreateGraphics();
+                pictureBoxGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                pictureBoxGraphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
                 Redraw();
+            }
+        }
+        
+        private void RadioButtons_CheckedChanged(object sender, EventArgs e)
+        {
+            // Reset all selections and redraw
+            selectedIndex = -1;
+            selectedType = null;
+            lineSelectionActor = null;
+            lineSelectionUseCase = null;
+            Redraw();
+
+            // Check if select radiobutton is now selected
+            if((RadioButton) sender == selectRadioButton)
+            {
+                // Deactivate the element radiobuttons as you shouldn't be able to use them now
+                actorRadioButton.Enabled = false;
+                useCaseRadioButton.Enabled = false;
+                lineRadioButton.Enabled = false;
+            }
+            else
+            {
+                // Active them
+                actorRadioButton.Enabled = true;
+                useCaseRadioButton.Enabled = true;
+                lineRadioButton.Enabled = true;
             }
         }
     }

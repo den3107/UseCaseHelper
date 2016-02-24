@@ -67,7 +67,7 @@ namespace UseCaseHelper
             Pen pen = new Pen((isSelected ? Color.Red : Color.Black));
             g.DrawEllipse(pen, x, y, width, height);
             brush = new SolidBrush((isSelected ? Color.Red : Color.Black));
-            g.DrawString(name, Font, brush, x + width / 2 - nameBounds.Width / 2, y + height / 2 - nameBounds.Height / 2);
+            g.DrawString(name, Font, brush, x + width / 2 - nameBounds.Width / 2, y + height / 2 - nameBounds.Height / 2 + 2); // The + 2 on y due to the antialiasing
         }
     }
 }

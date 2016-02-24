@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,14 +13,12 @@ namespace UseCaseHelper
 {
     public partial class NameForm : Form
     {
-        public NameForm()
+        public NameForm(String type)
         {
             InitializeComponent();
-        }
 
-        private void actorNameTextBox_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            
+            instructionLabel.Text = "Insert " + type + " name";
+            this.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(type) + " name";
         }
 
         private void actorNameTextBox_KeyUp(object sender, KeyEventArgs e)
