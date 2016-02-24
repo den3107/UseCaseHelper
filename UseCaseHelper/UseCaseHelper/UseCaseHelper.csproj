@@ -47,11 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actor.cs" />
-    <Compile Include="ActorNameForm.cs">
+    <Compile Include="NameForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ActorNameForm.Designer.cs">
-      <DependentUpon>ActorNameForm.cs</DependentUpon>
+    <Compile Include="NameForm.Designer.cs">
+      <DependentUpon>NameForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -61,8 +61,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ActorNameForm.resx">
-      <DependentUpon>ActorNameForm.cs</DependentUpon>
+    <Compile Include="UseCase.cs" />
+    <EmbeddedResource Include="NameForm.resx">
+      <DependentUpon>NameForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

@@ -130,12 +130,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.useCaseDiagramPictureBox.BackColor = System.Drawing.Color.White;
             this.useCaseDiagramPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.useCaseDiagramPictureBox.Location = new System.Drawing.Point(20, 151);
+            this.useCaseDiagramPictureBox.Location = new System.Drawing.Point(13, 151);
             this.useCaseDiagramPictureBox.Name = "useCaseDiagramPictureBox";
             this.useCaseDiagramPictureBox.Size = new System.Drawing.Size(863, 358);
             this.useCaseDiagramPictureBox.TabIndex = 2;
             this.useCaseDiagramPictureBox.TabStop = false;
-            this.useCaseDiagramPictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.useCaseDiagramPictureBox_MouseUp);
+            this.useCaseDiagramPictureBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.useCaseDiagramPictureBox_MouseClick);
             // 
             // clearButton
             // 
@@ -174,6 +174,7 @@
             this.MinimumSize = new System.Drawing.Size(500, 300);
             this.Name = "Form1";
             this.Text = "Use Case Helper";
+            this.Resize += new System.EventHandler(this.Form1_Resize);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);

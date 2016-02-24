@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace UseCaseHelper
 {
-    public partial class ActorNameForm : Form
+    public partial class NameForm : Form
     {
-        public ActorNameForm()
+        public NameForm()
         {
             InitializeComponent();
         }

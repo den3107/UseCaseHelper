@@ -12,29 +12,32 @@ namespace UseCaseHelper
 {
     public partial class Form1 : Form
     {
-        readonly int actorMargin = 5;
-        readonly int actorBaseWidth;
-        readonly int actorBaseHeight;
+        readonly int actorBaseWidth = 25;
+        readonly int actorBaseHeight = 75;
+        readonly int useCaseBaseWidth = 50;
+        readonly int useCaseBaseHeight = 25;
         int selectedIndex;
+        Type selectedType;
         List<Actor> actors;
+        List<UseCase> useCases;
         Graphics pictureBoxGraphics;
 
         public Form1()
         {
-            actorBaseWidth = 25 + actorMargin * 2;
-            actorBaseHeight = 75 + actorMargin * 2;
-
             InitializeComponent();
 
             selectedIndex = -1;
+            selectedType = null;
             actors = new List<Actor>();
+            useCases = new List<UseCase>();
             pictureBoxGraphics = useCaseDiagramPictureBox.CreateGraphics();
         }
 
-        private void useCaseDiagramPictureBox_MouseUp(object sender, MouseEventArgs e)
+        private void useCaseDiagramPictureBox_MouseClick(object sender, MouseEventArgs e)
         {
-            Redraw();
             selectedIndex = -1;
+            selectedType = null;
+            Redraw();
             // Check if in create mode
             if (createRadioButton.Checked)
             {
@@ -42,20 +45,42 @@ namespace UseCaseHelper
                 if (actorRadioButton.Checked)
                 {
                     // Open dialog prompting user for actor name
-                    using (ActorNameForm dialog = new ActorNameForm())
+                    using (NameForm dialog = new NameForm())
                     {
                         DialogResult result = dialog.ShowDialog();
-                        if (result == DialogResult.Cancel)
-                        {
-                            // Actor creation cancelled, step out of method
-                            return;
-                        }
-                        else
+                        if (result == DialogResult.OK)
                         {
                             // Actor creation validated, continue!
                             CreateActor(dialog.actorNameTextBox.Text, e.Location);
                         }
+                        else
+                        {
+                            // Actor creation cancelled, step out of method
+                            return;
+                        }
                     }
+                }
+                else if(useCaseRadioButton.Checked)
+                {
+                    // Open dialog prompting user for use case name
+                    using (NameForm dialog = new NameForm())
+                    {
+                        DialogResult result = dialog.ShowDialog();
+                        if (result == DialogResult.OK)
+                        {
+                            // Actor creation validated, continue!
+                            CreateUseCase(dialog.actorNameTextBox.Text, e.Location);
+                        }
+                        else
+                        {
+                            // Actor creation cancelled, step out of method
+                            return;
+                        }
+                    }
+                }
+                else if (lineRadioButton.Checked)
+                {
+
                 }
             }
             else // Select mode
@@ -67,11 +92,25 @@ namespace UseCaseHelper
                     // Check if mouse is within boudn of actor
                     if(e.Location.X >= actor.x && e.Location.X <= actor.x + actor.width && e.Location.Y >= actor.y && e.Location.Y <= actor.y + actor.height)
                     {
-                        // Draw rectangle around actor
-                        Pen pen = new Pen(Color.Black);
-                        pictureBoxGraphics.DrawRectangle(pen, actor.x, actor.y, actor.width, actor.height);
+                        // Redraw selected actor
+                        actor.Draw(pictureBoxGraphics, Font, true);
                         selectedIndex = i;
-                        break;
+                        selectedType = typeof(Actor);
+                        return;
+                    }
+                }
+                for (int i = 0; i < useCases.Count; i++)
+                {
+                    UseCase useCase = useCases[i];
+
+                    // Check if mouse is within boudn of actor
+                    if (e.Location.X >= useCase.x && e.Location.X <= useCase.x + useCase.width && e.Location.Y >= useCase.y && e.Location.Y <= useCase.y + useCase.height)
+                    {
+                        // Redraw selected actor
+                        useCase.Draw(pictureBoxGraphics, Font, true);
+                        selectedIndex = i;
+                        selectedType = typeof(UseCase);
+                        return;
                     }
                 }
             }
@@ -80,9 +119,13 @@ namespace UseCaseHelper
         private void Redraw()
         {
             pictureBoxGraphics.Clear(Color.White);
-            foreach(Actor actor in actors)
+            for (int i = 0; i < actors.Count; i++)
             {
-                actor.Draw(pictureBoxGraphics, Font);
+                actors[i].Draw(pictureBoxGraphics, Font, (i == selectedIndex && selectedType == typeof(Actor) ? true : false));
+            }
+            for (int i = 0; i < useCases.Count; i++)
+            {
+                useCases[i].Draw(pictureBoxGraphics, Font, (i == selectedIndex && selectedType == typeof(UseCase) ? true : false));
             }
         }
 
@@ -97,18 +140,46 @@ namespace UseCaseHelper
                 SizeF nameBounds = pictureBoxGraphics.MeasureString(name, Font);
 
                 // Update width and height
-                width = Math.Max(width, (int) nameBounds.Width + actorMargin * 2);
-                height += (int) nameBounds.Height + actorMargin;
+                width = Math.Max(width, (int) nameBounds.Width);
+                height += (int) nameBounds.Height;
             }
 
             // Create actor
-            Actor actor = new Actor(mouse.X - actorMargin, mouse.Y - actorMargin, width, height, actorMargin, name);
+            Actor actor = new Actor(mouse.X, mouse.Y, width, height, name);
 
-            // Draw actor
-            actor.Draw(pictureBoxGraphics, Font);
+            // Draw actor and set as selected
+            actor.Draw(pictureBoxGraphics, Font, true);
+            selectedIndex = actors.Count;
+            selectedType = typeof(Actor);
 
             // Add actor to list
             actors.Add(actor);
+        }
+
+        private void CreateUseCase(String name, Point mouse)
+        {
+            int width = useCaseBaseWidth;
+            int height = useCaseBaseHeight;
+
+            if (name != "")
+            {
+                // Get size of name when drawn
+                SizeF nameBounds = pictureBoxGraphics.MeasureString(name, Font);
+
+                // Update width
+                width = Math.Max(width, (int) nameBounds.Width + 15 * 2);
+            }
+
+            // Create use case
+            UseCase useCase = new UseCase(useCaseBaseWidth, mouse.X, mouse.Y, width, height, name);
+
+            // Draw actor and set as selected
+            useCase.Draw(pictureBoxGraphics, Font, true);
+            selectedIndex = useCases.Count;
+            selectedType = typeof(UseCase);
+
+            // Add actor to list
+            useCases.Add(useCase);
         }
 
         private void clearButton_Click(object sender, EventArgs e)
@@ -122,20 +193,32 @@ namespace UseCaseHelper
         {
             if(selectedIndex >= 0)
             {
-                if(actorRadioButton.Checked)
+                if(selectedType == typeof(Actor))
                 {
                     actors.RemoveAt(selectedIndex);
                 }
-                else if (useCaseRadioButton.Checked)
+                else if (selectedType == typeof(UseCase))
                 {
-
+                    useCases.RemoveAt(selectedIndex);
                 }
-                else
+                else if (true)
                 {
 
                 }
             }
+            selectedIndex = -1;
+            selectedType = null;
             Redraw();
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            if (pictureBoxGraphics != null)
+            {
+                // Create new graphics object due to new sizes (they don't update)
+                pictureBoxGraphics = useCaseDiagramPictureBox.CreateGraphics();
+                Redraw();
+            }
         }
     }
 }

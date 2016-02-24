@@ -1,6 +1,6 @@
 ﻿namespace UseCaseHelper
 {
-    partial class ActorNameForm
+    partial class NameForm
     {
         /// <summary>
         /// Required designer variable.
