@@ -26,6 +26,10 @@ namespace UseCaseHelper
 
         public void Draw(Graphics g, Font Font, Boolean isSelected)
         {
+            // Draw background
+            Brush brush = new SolidBrush(Color.White);
+            g.FillRectangle(brush, x, y, width, height);
+
             // Get middle
             int middle = (int) width / 2;
 
@@ -43,7 +47,7 @@ namespace UseCaseHelper
                 SizeF nameBounds = g.MeasureString(name, Font);
 
                 // Draw name
-                Brush brush = new SolidBrush((isSelected ? Color.Red : Color.Black));
+                brush = new SolidBrush((isSelected ? Color.Red : Color.Black));
                 g.DrawString(name, Font, brush, x + middle - (int) nameBounds.Width / 2, y + 75 + 5);
             }
         }

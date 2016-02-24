@@ -12,14 +12,28 @@ namespace UseCaseHelper
 {
     public partial class Form1 : Form
     {
+        // Base values
         readonly int actorBaseWidth = 25;
         readonly int actorBaseHeight = 75;
         readonly int useCaseBaseWidth = 50;
         readonly int useCaseBaseHeight = 25;
+        readonly int lineBaseWidth = 10;
+        readonly int lineBaseHeight = 10;
+
+        // Selection indications
         int selectedIndex;
         Type selectedType;
+
+        // Object lsts
         List<Actor> actors;
         List<UseCase> useCases;
+        List<Line> lines;
+
+        // Line selection objects
+        Actor lineSelectionActor;
+        UseCase lineSelectionUseCase;
+
+        // Graphics object
         Graphics pictureBoxGraphics;
 
         public Form1()
@@ -30,6 +44,9 @@ namespace UseCaseHelper
             selectedType = null;
             actors = new List<Actor>();
             useCases = new List<UseCase>();
+            lines = new List<Line>();
+            lineSelectionActor = null;
+            lineSelectionUseCase = null;
             pictureBoxGraphics = useCaseDiagramPictureBox.CreateGraphics();
         }
 
@@ -80,7 +97,72 @@ namespace UseCaseHelper
                 }
                 else if (lineRadioButton.Checked)
                 {
+                    for (int i = 0; i < actors.Count; i++)
+                    {
+                        Actor actor = actors[i];
 
+                        // Check if mouse is within bound of actor
+                        if (e.Location.X >= actor.x && e.Location.X <= actor.x + actor.width && e.Location.Y >= actor.y && e.Location.Y <= actor.y + actor.height)
+                        {
+                            // Check if there was already a use case selected (connection made)
+                            if (lineSelectionUseCase != null)
+                            {
+                                lineSelectionActor = actor;
+                                CreateLine();
+                            }
+                            else
+                            {
+                                // Check if there was previously another actor selected
+                                if (lineSelectionActor != null)
+                                {
+                                    // Redraw that actor, only unselected
+                                    lineSelectionActor.Draw(pictureBoxGraphics, Font, false);
+                                }
+
+                                // Set selected actor
+                                lineSelectionActor = actor;
+
+                                // Redraw selected actor, only selected
+                                actor.Draw(pictureBoxGraphics, Font, true);
+                                return;
+                            }
+                        }
+                    }
+                    for (int i = 0; i < useCases.Count; i++)
+                    {
+                        UseCase useCase = useCases[i];
+
+                        // Check if mouse is within bound of use case
+                        if (e.Location.X >= useCase.x && e.Location.X <= useCase.x + useCase.width && e.Location.Y >= useCase.y && e.Location.Y <= useCase.y + useCase.height)
+                        {
+                            // Check if there was already an actor selected (connection made)
+                            if (lineSelectionActor != null)
+                            {
+                                lineSelectionUseCase = useCase;
+                                CreateLine();
+                            }
+                            else
+                            {
+                                // Check if there was previously another use case selected
+                                if (lineSelectionUseCase != null)
+                                {
+                                    // Redraw that use case, only unselected
+                                    lineSelectionUseCase.Draw(pictureBoxGraphics, Font, false);
+                                }
+
+                                // Set selected use case
+                                lineSelectionUseCase = useCase;
+
+                                // Redraw selected use case, only selected
+                                useCase.Draw(pictureBoxGraphics, Font, true);
+                                return;
+                            }
+                        }
+                    }
+
+                    // Nothing selected, reset selection
+                    lineSelectionActor = null;
+                    lineSelectionUseCase = null;
                 }
             }
             else // Select mode
@@ -89,7 +171,7 @@ namespace UseCaseHelper
                 {
                     Actor actor = actors[i];
 
-                    // Check if mouse is within boudn of actor
+                    // Check if mouse is within bound of actor
                     if(e.Location.X >= actor.x && e.Location.X <= actor.x + actor.width && e.Location.Y >= actor.y && e.Location.Y <= actor.y + actor.height)
                     {
                         // Redraw selected actor
@@ -103,13 +185,27 @@ namespace UseCaseHelper
                 {
                     UseCase useCase = useCases[i];
 
-                    // Check if mouse is within boudn of actor
+                    // Check if mouse is within bound of use case
                     if (e.Location.X >= useCase.x && e.Location.X <= useCase.x + useCase.width && e.Location.Y >= useCase.y && e.Location.Y <= useCase.y + useCase.height)
                     {
-                        // Redraw selected actor
+                        // Redraw selected use case
                         useCase.Draw(pictureBoxGraphics, Font, true);
                         selectedIndex = i;
                         selectedType = typeof(UseCase);
+                        return;
+                    }
+                }
+                for (int i = 0; i < lines.Count; i++)
+                {
+                    Line line = lines[i];
+
+                    // Check if mouse is within bound of line
+                    if (e.Location.X >= line.xSelectionBox && e.Location.X <= line.xSelectionBox + line.widthSelectionBox && e.Location.Y >= line.ySelectionBox && e.Location.Y <= line.ySelectionBox + line.heightSelectionBox)
+                    {
+                        // Redraw selected line
+                        line.Draw(pictureBoxGraphics, Font, true);
+                        selectedIndex = i;
+                        selectedType = typeof(Line);
                         return;
                     }
                 }
@@ -119,6 +215,11 @@ namespace UseCaseHelper
         private void Redraw()
         {
             pictureBoxGraphics.Clear(Color.White);
+            // Always draw lines first, then the rest so they overlap the line
+            for (int i = 0; i < lines.Count; i++)
+            {
+                lines[i].Draw(pictureBoxGraphics, Font, (i == selectedIndex && selectedType == typeof(Line) ? true : false));
+            }
             for (int i = 0; i < actors.Count; i++)
             {
                 actors[i].Draw(pictureBoxGraphics, Font, (i == selectedIndex && selectedType == typeof(Actor) ? true : false));
@@ -182,11 +283,37 @@ namespace UseCaseHelper
             useCases.Add(useCase);
         }
 
+        private void CreateLine()
+        {
+            // Get selectionbox position
+            int x = ((lineSelectionActor.x + lineSelectionActor.width / 2) + (lineSelectionUseCase.x + lineSelectionUseCase.width / 2)) / 2 - lineBaseWidth / 2;
+            int y = ((lineSelectionActor.y + lineSelectionActor.height / 2) + (lineSelectionUseCase.y + lineSelectionUseCase.height / 2)) / 2 - lineBaseHeight / 2;
+
+            // Create line
+            Line line = new Line(x, y, lineBaseWidth, lineBaseHeight, lineSelectionActor, lineSelectionUseCase);
+
+            // Set selection
+            selectedIndex = lines.Count;
+            selectedType = typeof(Line);
+
+            // Draw line
+            line.Draw(pictureBoxGraphics, Font, true);
+
+            // Add to list
+            lines.Add(line);
+
+            // Set line selection to nothing
+            lineSelectionActor = null;
+            lineSelectionUseCase = null;
+        }
+
         private void clearButton_Click(object sender, EventArgs e)
         {
             // Basically just clear everything
             pictureBoxGraphics.Clear(Color.White);
             actors = new List<Actor>();
+            useCases = new List<UseCase>();
+            lines = new List<Line>();
         }
 
         private void removeButton_Click(object sender, EventArgs e)
@@ -201,9 +328,9 @@ namespace UseCaseHelper
                 {
                     useCases.RemoveAt(selectedIndex);
                 }
-                else if (true)
+                else if (selectedType == typeof(Line))
                 {
-
+                    lines.RemoveAt(selectedIndex);
                 }
             }
             selectedIndex = -1;

@@ -53,38 +53,21 @@ namespace UseCaseHelper
 
         public void Draw(Graphics g, Font Font, Boolean isSelected)
         {
-            // Get middle
-            //int middle = (int) width / 2;
-
             // Get size of name
             SizeF nameBounds = g.MeasureString(name, Font);
 
             // Update width
             width = Math.Max(minWidth, (int) nameBounds.Width + 15 * 2);
 
+            // Draw background
+            Brush brush = new SolidBrush(Color.White);
+            g.FillEllipse(brush, x, y, width, height);
+
             // Draw ellipse and name
             Pen pen = new Pen((isSelected ? Color.Red : Color.Black));
             g.DrawEllipse(pen, x, y, width, height);
-            Brush brush = new SolidBrush((isSelected ? Color.Red : Color.Black));
+            brush = new SolidBrush((isSelected ? Color.Red : Color.Black));
             g.DrawString(name, Font, brush, x + width / 2 - nameBounds.Width / 2, y + height / 2 - nameBounds.Height / 2);
-
-            // Body
-            /*Pen pen = new Pen(Color.Black);
-            g.DrawEllipse(pen, x + middle - 13, y + margin, 25, 25);
-            g.DrawLine(pen, x + middle, y + 25 + margin, x + middle, y + 50 + margin);
-            g.DrawLine(pen, x + middle - 13, y + 35 + margin, x + middle + 13, y + 35 + margin);
-            g.DrawLine(pen, x + middle, y + 50 + margin, x + middle - 13, y + 75 + margin);
-            g.DrawLine(pen, x + middle, y + 50 + margin, x + middle + 13, y + 75 + margin);
-
-            if (name != "")
-            {
-                // Get size of name when drawn
-                SizeF nameBounds = g.MeasureString(name, Font);
-
-                // Draw name
-                brush = new SolidBrush(Color.Black);
-                g.DrawString(name, Font, brush, x + middle - (int) nameBounds.Width / 2, y + 75 + margin + margin);
-            }*/
         }
     }
 }
