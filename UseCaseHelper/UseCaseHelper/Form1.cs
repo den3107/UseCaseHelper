@@ -24,7 +24,7 @@ namespace UseCaseHelper
         int selectedIndex;
         Type selectedType;
 
-        // Object lsts
+        // Object lists
         List<Actor> actors;
         List<UseCase> useCases;
         List<Line> lines;
@@ -32,6 +32,9 @@ namespace UseCaseHelper
         // Line selection objects
         Actor lineSelectionActor;
         UseCase lineSelectionUseCase;
+
+        // Use case properties form
+        UseCasePropertiesForm useCasePropertiesForm;
 
         // Graphics object
         Graphics pictureBoxGraphics;
@@ -47,6 +50,7 @@ namespace UseCaseHelper
             lines = new List<Line>();
             lineSelectionActor = null;
             lineSelectionUseCase = null;
+            useCasePropertiesForm = null;
             pictureBoxGraphics = useCaseDiagramPictureBox.CreateGraphics();
             pictureBoxGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             pictureBoxGraphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
@@ -54,9 +58,10 @@ namespace UseCaseHelper
 
         private void useCaseDiagramPictureBox_MouseClick(object sender, MouseEventArgs e)
         {
+            UpdateUseCasePropertiesForm();
             selectedIndex = -1;
             selectedType = null;
-            Redraw();
+
             // Check if in create mode
             if (createRadioButton.Checked)
             {
@@ -72,11 +77,6 @@ namespace UseCaseHelper
                             // Actor creation validated, continue!
                             CreateActor(dialog.actorNameTextBox.Text, e.Location);
                         }
-                        else
-                        {
-                            // Actor creation cancelled, step out of method
-                            return;
-                        }
                     }
                 }
                 else if(useCaseRadioButton.Checked)
@@ -89,11 +89,6 @@ namespace UseCaseHelper
                         {
                             // Actor creation validated, continue!
                             CreateUseCase(dialog.actorNameTextBox.Text, e.Location);
-                        }
-                        else
-                        {
-                            // Actor creation cancelled, step out of method
-                            return;
                         }
                     }
                 }
@@ -180,6 +175,7 @@ namespace UseCaseHelper
                         actor.Draw(pictureBoxGraphics, Font, true);
                         selectedIndex = i;
                         selectedType = typeof(Actor);
+                        Redraw();
                         return;
                     }
                 }
@@ -194,6 +190,9 @@ namespace UseCaseHelper
                         useCase.Draw(pictureBoxGraphics, Font, true);
                         selectedIndex = i;
                         selectedType = typeof(UseCase);
+                        useCasePropertiesForm = new UseCasePropertiesForm(useCase);
+                        useCasePropertiesForm.Show();
+                        Redraw();
                         return;
                     }
                 }
@@ -208,10 +207,13 @@ namespace UseCaseHelper
                         line.Draw(pictureBoxGraphics, Font, true);
                         selectedIndex = i;
                         selectedType = typeof(Line);
+                        Redraw();
                         return;
                     }
                 }
             }
+            
+            Redraw();
         }
 
         private void Redraw()
@@ -229,6 +231,24 @@ namespace UseCaseHelper
             for (int i = 0; i < useCases.Count; i++)
             {
                 useCases[i].Draw(pictureBoxGraphics, Font, (i == selectedIndex && selectedType == typeof(UseCase) ? true : false));
+            }
+        }
+
+        private void UpdateUseCasePropertiesForm()
+        {
+            if(useCasePropertiesForm != null && selectedIndex != -1)
+            {
+                // Update usecase
+                useCases[selectedIndex].name = useCasePropertiesForm.nameTextBox.Text;
+                useCases[selectedIndex].summary = useCasePropertiesForm.summaryTextBox.Text;
+                useCases[selectedIndex].assumption = useCasePropertiesForm.assumptionTextBox.Text;
+                useCases[selectedIndex].description = useCasePropertiesForm.descriptionTextBox.Text;
+                useCases[selectedIndex].exception = useCasePropertiesForm.exceptionTextBox.Text;
+                useCases[selectedIndex].result = useCasePropertiesForm.resultTextBox.Text;
+
+                // Close dialog
+                useCasePropertiesForm.Close();
+                useCasePropertiesForm = null;
             }
         }
 
@@ -283,10 +303,17 @@ namespace UseCaseHelper
 
             // Add actor to list
             useCases.Add(useCase);
+
+            // Open properties window
+            useCasePropertiesForm = new UseCasePropertiesForm(useCase);
+            useCasePropertiesForm.Show();
         }
 
         private void CreateLine()
         {
+            // Add actor to use case
+            lineSelectionUseCase.actors.Add(lineSelectionActor);
+
             // Get selectionbox position
             int x = ((lineSelectionActor.x + lineSelectionActor.width / 2) + (lineSelectionUseCase.x + lineSelectionUseCase.width / 2)) / 2 - lineBaseWidth / 2;
             int y = ((lineSelectionActor.y + lineSelectionActor.height / 2) + (lineSelectionUseCase.y + lineSelectionUseCase.height / 2)) / 2 - lineBaseHeight / 2;
@@ -303,6 +330,10 @@ namespace UseCaseHelper
 
             // Add to list
             lines.Add(line);
+
+            // Redraw actor and user case
+            lineSelectionActor.Draw(pictureBoxGraphics, Font, false);
+            lineSelectionUseCase.Draw(pictureBoxGraphics, Font, false);
 
             // Set line selection to nothing
             lineSelectionActor = null;
@@ -324,22 +355,31 @@ namespace UseCaseHelper
             {
                 if(selectedType == typeof(Actor))
                 {
-                    // Check if connected to line and delete line if it is
-                    Line line = GetConnectedLine(actors[selectedIndex]);
-                    if(line != null)
+                    // Check if connected to line
+                    Line[] ls = GetConnectedLine(actors[selectedIndex]);
+
+                    // Delete line and actor and actor in connected user case]
+                    for (int i = 0; i < ls.Length; i++)
                     {
-                        lines.Remove(line);
+                        ls[i].useCase.actors.Remove(actors[selectedIndex]);
+
+                        lines.Remove(ls[i]);
                     }
                     actors.RemoveAt(selectedIndex);
                 }
                 else if (selectedType == typeof(UseCase))
                 {
-                    // Check if connected to line and delete line if it is
-                    Line line = GetConnectedLine(useCases[selectedIndex]);
-                    if (line != null)
+                    // Check if connected to line
+                    Line[] ls = GetConnectedLine(useCases[selectedIndex]);
+
+                    // Delete line and actor
+                    for (int i = 0; i < ls.Length; i++)
                     {
-                        lines.Remove(line);
+                        lines.Remove(ls[i]);
                     }
+
+                    useCasePropertiesForm.Close();
+                    useCasePropertiesForm = null;
                     useCases.RemoveAt(selectedIndex);
                 }
                 else if (selectedType == typeof(Line))
@@ -352,28 +392,30 @@ namespace UseCaseHelper
             Redraw();
         }
 
-        private Line GetConnectedLine(Actor actor)
+        private Line[] GetConnectedLine(Actor actor)
         {
+            List<Line> ls = new List<Line>();
             foreach(Line line in lines)
             {
                 if(line.actor == actor)
                 {
-                    return line;
+                    ls.Add(line);
                 }
             }
-            return null;
+            return ls.ToArray();
         }
 
-        private Line GetConnectedLine(UseCase useCase)
+        private Line[] GetConnectedLine(UseCase useCase)
         {
+            List<Line> ls = new List<Line>();
             foreach (Line line in lines)
             {
                 if (line.useCase == useCase)
                 {
-                    return line;
+                    ls.Add(line);
                 }
             }
-            return null;
+            return ls.ToArray();
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -391,6 +433,7 @@ namespace UseCaseHelper
         private void RadioButtons_CheckedChanged(object sender, EventArgs e)
         {
             // Reset all selections and redraw
+            UpdateUseCasePropertiesForm();
             selectedIndex = -1;
             selectedType = null;
             lineSelectionActor = null;

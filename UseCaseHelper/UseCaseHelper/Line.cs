@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UseCaseHelper
 {
-    class Line
+    public class Line
     {
         public int xSelectionBox { get; }
         public int ySelectionBox { get; }
@@ -39,10 +39,6 @@ namespace UseCaseHelper
             // Draw selection box
             Brush brush = new SolidBrush((isSelected ? Color.Red : Color.Black));
             g.FillRectangle(brush, xSelectionBox, ySelectionBox, widthSelectionBox, heightSelectionBox);
-
-            // Redraw actor and user case
-            actor.Draw(g, font, false);
-            useCase.Draw(g, font, false);
         }
     }
 }

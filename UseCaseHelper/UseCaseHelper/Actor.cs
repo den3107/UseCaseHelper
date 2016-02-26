@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UseCaseHelper
 {
-    class Actor
+    public class Actor
     {
         public int x { get; }
         public int y { get; }

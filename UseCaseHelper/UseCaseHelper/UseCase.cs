@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UseCaseHelper
 {
-    class UseCase
+    public class UseCase
     {
         // Minimum sizes
         readonly int minWidth;
@@ -21,9 +21,10 @@ namespace UseCaseHelper
         // Properties
         public String name { get; set; }
         public String summary { get; set; }
+        public String assumption { get; set; }
         public List<Actor> actors { get; private set; }
         public String description { get; set; }
-        public String exceptions { get; set; }
+        public String exception { get; set; }
         public String result { get; set; }
 
         public UseCase(int minWidth, int x, int y, int width, int height, String name)
@@ -35,9 +36,10 @@ namespace UseCaseHelper
             this.height = height;
             this.name = name;
             this.summary = "";
+            this.assumption = "";
             this.actors = new List<Actor>();
             this.description = "";
-            this.exceptions = "";
+            this.exception = "";
             this.result = "";
         }
 
