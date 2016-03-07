@@ -38,6 +38,7 @@
             this.useCaseDiagramPictureBox = new System.Windows.Forms.PictureBox();
             this.clearButton = new System.Windows.Forms.Button();
             this.removeButton = new System.Windows.Forms.Button();
+            this.toImageButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.useCaseDiagramPictureBox)).BeginInit();
@@ -48,11 +49,11 @@
             this.groupBox1.Controls.Add(this.lineRadioButton);
             this.groupBox1.Controls.Add(this.useCaseRadioButton);
             this.groupBox1.Controls.Add(this.actorRadioButton);
-            this.groupBox1.Location = new System.Drawing.Point(10, 11);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Location = new System.Drawing.Point(13, 14);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(80, 96);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox1.Size = new System.Drawing.Size(107, 118);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Elements";
@@ -60,10 +61,10 @@
             // lineRadioButton
             // 
             this.lineRadioButton.AutoSize = true;
-            this.lineRadioButton.Location = new System.Drawing.Point(5, 63);
-            this.lineRadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.lineRadioButton.Location = new System.Drawing.Point(7, 78);
+            this.lineRadioButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lineRadioButton.Name = "lineRadioButton";
-            this.lineRadioButton.Size = new System.Drawing.Size(45, 17);
+            this.lineRadioButton.Size = new System.Drawing.Size(56, 21);
             this.lineRadioButton.TabIndex = 2;
             this.lineRadioButton.TabStop = true;
             this.lineRadioButton.Text = "Line";
@@ -73,10 +74,10 @@
             // useCaseRadioButton
             // 
             this.useCaseRadioButton.AutoSize = true;
-            this.useCaseRadioButton.Location = new System.Drawing.Point(5, 41);
-            this.useCaseRadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.useCaseRadioButton.Location = new System.Drawing.Point(7, 50);
+            this.useCaseRadioButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.useCaseRadioButton.Name = "useCaseRadioButton";
-            this.useCaseRadioButton.Size = new System.Drawing.Size(70, 17);
+            this.useCaseRadioButton.Size = new System.Drawing.Size(88, 21);
             this.useCaseRadioButton.TabIndex = 1;
             this.useCaseRadioButton.TabStop = true;
             this.useCaseRadioButton.Text = "Use case";
@@ -87,10 +88,10 @@
             // 
             this.actorRadioButton.AutoSize = true;
             this.actorRadioButton.Checked = true;
-            this.actorRadioButton.Location = new System.Drawing.Point(5, 18);
-            this.actorRadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.actorRadioButton.Location = new System.Drawing.Point(7, 22);
+            this.actorRadioButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.actorRadioButton.Name = "actorRadioButton";
-            this.actorRadioButton.Size = new System.Drawing.Size(50, 17);
+            this.actorRadioButton.Size = new System.Drawing.Size(62, 21);
             this.actorRadioButton.TabIndex = 0;
             this.actorRadioButton.TabStop = true;
             this.actorRadioButton.Text = "Actor";
@@ -101,11 +102,11 @@
             // 
             this.groupBox2.Controls.Add(this.selectRadioButton);
             this.groupBox2.Controls.Add(this.createRadioButton);
-            this.groupBox2.Location = new System.Drawing.Point(94, 11);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox2.Location = new System.Drawing.Point(125, 14);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox2.Size = new System.Drawing.Size(80, 96);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox2.Size = new System.Drawing.Size(107, 118);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Modes";
@@ -113,10 +114,10 @@
             // selectRadioButton
             // 
             this.selectRadioButton.AutoSize = true;
-            this.selectRadioButton.Location = new System.Drawing.Point(5, 41);
-            this.selectRadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.selectRadioButton.Location = new System.Drawing.Point(7, 50);
+            this.selectRadioButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.selectRadioButton.Name = "selectRadioButton";
-            this.selectRadioButton.Size = new System.Drawing.Size(55, 17);
+            this.selectRadioButton.Size = new System.Drawing.Size(68, 21);
             this.selectRadioButton.TabIndex = 1;
             this.selectRadioButton.TabStop = true;
             this.selectRadioButton.Text = "Select";
@@ -127,10 +128,10 @@
             // 
             this.createRadioButton.AutoSize = true;
             this.createRadioButton.Checked = true;
-            this.createRadioButton.Location = new System.Drawing.Point(5, 18);
-            this.createRadioButton.Margin = new System.Windows.Forms.Padding(2);
+            this.createRadioButton.Location = new System.Drawing.Point(7, 22);
+            this.createRadioButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.createRadioButton.Name = "createRadioButton";
-            this.createRadioButton.Size = new System.Drawing.Size(56, 17);
+            this.createRadioButton.Size = new System.Drawing.Size(71, 21);
             this.createRadioButton.TabIndex = 0;
             this.createRadioButton.TabStop = true;
             this.createRadioButton.Text = "Create";
@@ -144,22 +145,23 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.useCaseDiagramPictureBox.BackColor = System.Drawing.Color.White;
             this.useCaseDiagramPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.useCaseDiagramPictureBox.Location = new System.Drawing.Point(10, 111);
-            this.useCaseDiagramPictureBox.Margin = new System.Windows.Forms.Padding(2);
+            this.useCaseDiagramPictureBox.Location = new System.Drawing.Point(13, 137);
+            this.useCaseDiagramPictureBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.useCaseDiagramPictureBox.Name = "useCaseDiagramPictureBox";
-            this.useCaseDiagramPictureBox.Size = new System.Drawing.Size(648, 304);
+            this.useCaseDiagramPictureBox.Size = new System.Drawing.Size(863, 373);
             this.useCaseDiagramPictureBox.TabIndex = 2;
             this.useCaseDiagramPictureBox.TabStop = false;
+            this.useCaseDiagramPictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.useCaseDiagramPictureBox_Paint);
             this.useCaseDiagramPictureBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.useCaseDiagramPictureBox_MouseClick);
             // 
             // clearButton
             // 
             this.clearButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.clearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.clearButton.Location = new System.Drawing.Point(584, 10);
-            this.clearButton.Margin = new System.Windows.Forms.Padding(2);
+            this.clearButton.Location = new System.Drawing.Point(763, 12);
+            this.clearButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.clearButton.Name = "clearButton";
-            this.clearButton.Size = new System.Drawing.Size(73, 28);
+            this.clearButton.Size = new System.Drawing.Size(113, 34);
             this.clearButton.TabIndex = 3;
             this.clearButton.Text = "Clear all";
             this.clearButton.UseVisualStyleBackColor = true;
@@ -169,27 +171,41 @@
             // 
             this.removeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.removeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.removeButton.Location = new System.Drawing.Point(584, 43);
-            this.removeButton.Margin = new System.Windows.Forms.Padding(2);
+            this.removeButton.Location = new System.Drawing.Point(763, 53);
+            this.removeButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.removeButton.Name = "removeButton";
-            this.removeButton.Size = new System.Drawing.Size(73, 28);
+            this.removeButton.Size = new System.Drawing.Size(113, 34);
             this.removeButton.TabIndex = 4;
             this.removeButton.Text = "Remove";
             this.removeButton.UseVisualStyleBackColor = true;
             this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
             // 
+            // toImageButton
+            // 
+            this.toImageButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.toImageButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toImageButton.Location = new System.Drawing.Point(763, 91);
+            this.toImageButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.toImageButton.Name = "toImageButton";
+            this.toImageButton.Size = new System.Drawing.Size(113, 34);
+            this.toImageButton.TabIndex = 5;
+            this.toImageButton.Text = "To image";
+            this.toImageButton.UseVisualStyleBackColor = true;
+            this.toImageButton.Click += new System.EventHandler(this.toImageButton_Click);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(666, 423);
+            this.ClientSize = new System.Drawing.Size(888, 521);
+            this.Controls.Add(this.toImageButton);
             this.Controls.Add(this.removeButton);
             this.Controls.Add(this.clearButton);
             this.Controls.Add(this.useCaseDiagramPictureBox);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimumSize = new System.Drawing.Size(379, 251);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MinimumSize = new System.Drawing.Size(499, 298);
             this.Name = "Form1";
             this.Text = "Use Case Helper";
             this.Resize += new System.EventHandler(this.Form1_Resize);
@@ -214,6 +230,7 @@
         private System.Windows.Forms.PictureBox useCaseDiagramPictureBox;
         private System.Windows.Forms.Button clearButton;
         private System.Windows.Forms.Button removeButton;
+        private System.Windows.Forms.Button toImageButton;
     }
 }
 

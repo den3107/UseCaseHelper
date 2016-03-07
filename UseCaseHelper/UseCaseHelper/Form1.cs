@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -38,6 +41,9 @@ namespace UseCaseHelper
 
         // Graphics object
         Graphics pictureBoxGraphics;
+
+        // Create bitmap
+        Bitmap bmp;
 
         public Form1()
         {
@@ -384,6 +390,8 @@ namespace UseCaseHelper
                 }
                 else if (selectedType == typeof(Line))
                 {
+                    // Remove actor from connected usecase
+                    lines[selectedIndex].useCase.removeActor(lines[selectedIndex].actor);
                     lines.RemoveAt(selectedIndex);
                 }
             }
@@ -455,6 +463,41 @@ namespace UseCaseHelper
                 useCaseRadioButton.Enabled = true;
                 lineRadioButton.Enabled = true;
             }
+        }
+
+        private void toImageButton_Click(object sender, EventArgs e)
+        {
+            useCaseDiagramPictureBox.Invalidate();
+            //useCaseDiagramPictureBox.DrawToBitmap(bitmap, new Rectangle(useCaseDiagramPictureBox.Location, useCaseDiagramPictureBox.Size));
+            bmp.Save("C:/Users/Dennisf/Desktop/use_case_diagram.png", ImageFormat.Png);
+            Form1_Resize(this, new EventArgs());
+        }
+
+        private void useCaseDiagramPictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            bmp = new Bitmap(useCaseDiagramPictureBox.Bounds.Width, useCaseDiagramPictureBox.Bounds.Height, PixelFormat.Format32bppArgb);
+
+            // Initialize graphics
+            Graphics g = Graphics.FromImage(bmp);
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+
+            // Redraw with given graphics
+            g.Clear(Color.White);
+            // Always draw lines first, then the rest so they overlap the line
+            for (int i = 0; i < lines.Count; i++)
+            {
+                lines[i].Draw(g, Font, (i == selectedIndex && selectedType == typeof(Line) ? true : false));
+            }
+            for (int i = 0; i < actors.Count; i++)
+            {
+                actors[i].Draw(g, Font, (i == selectedIndex && selectedType == typeof(Actor) ? true : false));
+            }
+            for (int i = 0; i < useCases.Count; i++)
+            {
+                useCases[i].Draw(g, Font, (i == selectedIndex && selectedType == typeof(UseCase) ? true : false));
+            }
+            e.Graphics.DrawImage(bmp, new Point(0, 0));
         }
     }
 }
